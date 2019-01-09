@@ -4,50 +4,33 @@
 from zencad import *
 lazy.diag = True
 
-##Base
-#scaletrans = scaleY(1.51) # 1.45
-
-re1 = 33 / 2
-re2 = 38.5 / 2
-h = 7
+def make_body(con, cil, centrad, tooth, forbolt):
+	r1, r2, h = con
+	rc, hc = cil
+	toothes, tooth_radius = tooth
+	rdel, rhole, deltaangle = forbolt
+	t = h - hc
 	
-def make_body(r1, r2, h):
-	# Conic body
-	h = 7
-	
-	# Internal cylinder
-	rc = 31 / 2 + 0.5
-	hc = 5
-	
-	ri = 23 / 2 # Central hole radius
-	t = h - hc # Central part height
-	
-	rdel = 27 / 2 # Screw`s to center radius
-	rhole = 1 # Screw`s hole radius
-	
-	rcyl = 0.8 # Tooth radius
-	tooth_total = 54 # Count of toothes
-
 	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)])
 	return (
 		cone(r1=r1, r2=r2, h=h) 
 		- cylinder(r=rc, h=hc).up(t) 
-		- cylinder(r=ri, h=t)
-		- ctr(cylinder(r=rhole, h=t))
-		+ rotate_array(tooth_total)(cylinder(r=rcyl, h=h-t).up(t).forw(rc))
+		- cylinder(r=centrad, h=t)
+		- ctr(cylinder(r=rhole, h=t)).rotateZ(deltaangle)
+		+ rotate_array(toothes)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
 	)
 
-def make_base_support(r1, r2, h):
+def make_base_support(r1, r2, s, h):
 	return (
-		cone(r1=r1*1.51, r2=r2*1.51, h=h, angle=(0,deg(90)))
+		cone(r1=r1+s, r2=r2+s, h=h, angle=(0,deg(90)))
 		- halfspace().rotateY(-math.atan2(h,r2-r1)).right(r1)
 		- cone(r1, r2, h)
 	)
 	
-def make_holder():
+def make_holder(t):
 	polyg_xseg = 4.5
 	polyg_yseg = 4.5
-	hold_t = 3
+	hold_t = t
 	
 	hold_fil = 3
 	hold_fil2 = 1
@@ -95,12 +78,18 @@ def make_rebr(r, t, h, xblade, angle):
 		halfspace().rotateY(-deg(90)-angle).right(xblade)
 	])
 	return rebr
-	
-base = 			make_body(r1=re1, r2=re2, h=h)
-base_support = 	make_base_support(r1=re1, r2=re2, h=h)
-holder = 		make_holder().forw(re2)
-rebr = 			make_rebr(re2*1.51, 2, 23, xblade=re2, angle=deg(30)).up(h)
 
+######PARAMETRES######
+r1 = 33 / 2
+r2 = 38.5 / 2
+r3 = r2*1.51
+h = 7
+base = 			make_body(con=(r1,r2,h), cil=(16,5), centrad=11.5, tooth=(54,0.8), forbolt=(27/2,1,deg(0)))
+base_support = 	make_base_support(r1=r1, r2=r2, s=r3-r2, h=h)
+holder = 		make_holder(t=3).forw(16.5)
+rebr = 			make_rebr(r=r3, t=2, h=23, xblade=r2, angle=deg(30)).up(h)
+######################
+	
 m = union([
 	holder,
 	base,
