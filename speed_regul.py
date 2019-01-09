@@ -5,52 +5,53 @@ from zencad import *
 lazy.diag = True
 
 ##Base
+#scaletrans = scaleY(1.51) # 1.45
 
-# Conic body
 re1 = 33 / 2
 re2 = 38.5 / 2
 h = 7
-
-# Internal cylinder
-rc = 31 / 2 + 0.5
-hc = 5
-
-ri = 23 / 2 # Central hole radius
-t = h - hc # Central part height
-
-rdel = 27 / 2 # Screw`s to center radius
-rhole = 1 # Screw`s hole radius
-
-rcyl = 0.8 # Tooth radius
-tooth_total = 54 # Count of toothes
-
-scaletrans = scaleY(1.51) # 1.45
-
-def conic_body():
+	
+def make_body(r1, r2, h):
+	# Conic body
+	h = 7
+	
+	# Internal cylinder
+	rc = 31 / 2 + 0.5
+	hc = 5
+	
+	ri = 23 / 2 # Central hole radius
+	t = h - hc # Central part height
+	
+	rdel = 27 / 2 # Screw`s to center radius
+	rhole = 1 # Screw`s hole radius
+	
+	rcyl = 0.8 # Tooth radius
+	tooth_total = 54 # Count of toothes
 
 	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)])
 	return (
-		cone(r1=re1, r2=re2, h=h) 
-		+ cone(r1=re1*1.51, r2=re2*1.51, h=h, angle=(0,deg(90)))
-		- halfspace().rotateY(-math.atan2(h,re2-re1)).right(re1)
+		cone(r1=r1, r2=r2, h=h) 
 		- cylinder(r=rc, h=hc).up(t) 
 		- cylinder(r=ri, h=t)
 		- ctr(cylinder(r=rhole, h=t))
 		+ rotate_array(tooth_total)(cylinder(r=rcyl, h=h-t).up(t).forw(rc))
 	)
 
-base = conic_body()
-
-## Holder
-
+def make_base_support(r1, r2, h):
+	return (
+		cone(r1=r1*1.51, r2=r2*1.51, h=h, angle=(0,deg(90)))
+		- halfspace().rotateY(-math.atan2(h,r2-r1)).right(r1)
+		- cone(r1, r2, h)
+	)
+	
 def make_holder():
 	polyg_xseg = 4.5
 	polyg_yseg = 4.5
+	hold_t = 3
+	
 	hold_fil = 3
 	hold_fil2 = 1
-
 	eey = 2.8
-	hold_t = 3
 
 	polyg = polygon([
 		(polyg_xseg*0,		polyg_yseg*0.5), 
@@ -83,23 +84,29 @@ def make_holder():
 	det = det.up(hold_t/2)
 
 	m = m + det
-	m = m.rotateY(deg(90)).up(polyg_xseg*4).left(hold_t/2).forw(re2 - polyg_yseg*0.4 + 1.5)
-	return m
+	return m.rotateY(deg(90)).up(polyg_xseg*4).left(hold_t/2).forw(polyg_yseg*0.4 + 1.5)
+
+def make_rebr(r, t, h, xblade, angle):
+	rebr = cylinder(r=r, h=h) - cylinder(r=r-t, h=h)
+	rebr = difference([
+		rebr, 
+		halfspace().rotateX(-deg(90)),
+		halfspace().rotateY(deg(90)),
+		halfspace().rotateY(-deg(90)-angle).right(xblade)
+	])
+	return rebr
 	
-holder = make_holder()
+base = 			make_body(r1=re1, r2=re2, h=h)
+base_support = 	make_base_support(r1=re1, r2=re2, h=h)
+holder = 		make_holder().forw(re2)
+rebr = 			make_rebr(re2*1.51, 2, 23, xblade=re2, angle=deg(30)).up(h)
 
-display(holder)
-show()
-
-sys.exit()
-
-m = (holder - cone(r1=re1, r2=re2, h=h)) + base
-
-hrebr = 23
-rebr = cylinder(r=re2*1.51, h=hrebr).up(h) - cylinder(r=re2*1.51-2, h=hrebr).up(h)
-rebr = rebr - halfspace().rotateX(-deg(90)) - halfspace().rotateY(deg(90)) - halfspace().rotateY(-deg(90+30)).right(re2).up(h)
-
-m = m + rebr
+m = union([
+	holder,
+	base,
+	base_support,
+	rebr
+])
 
 display(m)
 show()
