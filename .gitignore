@@ -1,0 +1,68 @@
+<<<<<<< HEAD
+.evalcache
+=======
+__pycache__/
+*.pyc
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+.evalcache
+*.bin
+
+# For PCBs designed using KiCad: http://www.kicad-pcb.org/
+# Format documentation: http://kicad-pcb.org/help/file-formats/
+
+# Temporary files
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*~
+_autosave-*
+*.tmp
+*-rescue.lib
+*-save.pro
+*-save.kicad_pcb
+
+# Netlist files (exported from Eeschema)
+*.net
+
+# Autorouter files (exported from Pcbnew)
+*.dsn
+*.ses
+
+# Exported BOM files
+*.xml
+*.csv
+>>>>>>> 21213867b5060f278d055459842e0a442f1c52fa
