@@ -1,6 +1,7 @@
-<<<<<<< HEAD
+
 .evalcache
-=======
+.evalfile
+
 __pycache__/
 *.pyc
 
@@ -65,4 +66,3 @@ _autosave-*
 # Exported BOM files
 *.xml
 *.csv
->>>>>>> 21213867b5060f278d055459842e0a442f1c52fa
