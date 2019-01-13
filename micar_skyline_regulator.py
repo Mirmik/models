@@ -20,10 +20,11 @@ def make_body(con, cil, centrad, tooth, forbolt):
 		+ rotate_array(toothes)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
 	)
 
-def make_base_support(r1, r2, s, h):
+def make_base_support(r1, r2, s, h, t):
 	return (
-		cone(r1=r1+s, r2=r2+s, h=h, angle=(0,deg(90)))
+		cone(r1=r1+s, r2=r2+s, h=h, angle=(0,deg(180)))
 		- halfspace().rotateY(-math.atan2(h,r2-r1)).right(r1)
+		- halfspace().rotateY(deg(90)).left(t)
 		- cone(r1, r2, h)
 	)
 	
@@ -85,7 +86,7 @@ r2 = 38.5 / 2
 r3 = r2*1.51
 h = 7
 base = 			make_body(con=(r1,r2,h), cil=(16,5), centrad=11.5, tooth=(54,0.8), forbolt=(27/2,1,deg(0)))
-base_support = 	make_base_support(r1=r1, r2=r2, s=r3-r2, h=h)
+base_support = 	make_base_support(r1=r1, r2=r2, s=r3-r2, h=h, t=3/2)
 holder = 		make_holder(t=3).forw(16.5)
 rebr = 			make_rebr(r=r3, t=2, h=23, xblade=r2, angle=deg(30)).up(h)
 ######################
