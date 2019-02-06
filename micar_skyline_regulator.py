@@ -49,9 +49,9 @@ def make_holder(t):
 		(polyg_xseg*(-1),	polyg_yseg*1),
 	]).left(polyg_xseg*3)
 	
-	polyg = polyg.fillet(hold_fil)
+	polyg = fillet(polyg, hold_fil)
 	
-	m = polyg.extrude(hold_t).fillet(hold_fil2)
+	m = fillet(polyg.extrude(hold_t), hold_fil2)
 	m = m + mirrorYZ()(m)
 	
 	hh = polygon([(0,-4), (-2,2), (-12,6), (5,8), (5,-4)]).extrude(hold_t).right(polyg_xseg*4-5).fillet(hold_fil2)
