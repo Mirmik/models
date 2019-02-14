@@ -22,7 +22,7 @@ def make_body(con, cil, centrad, tooth, forbolt):
 
 def make_base_support(r1, r2, s, h, t):
 	return (
-		cone(r1=r1+s, r2=r2+s, h=h, angle=(0,deg(180)))
+		cone(r1=r1+s, r2=r2+s, h=h, yaw=deg(180))
 		- halfspace().rotateY(-math.atan2(h,r2-r1)).right(r1)
 		- halfspace().rotateY(deg(90)).left(t)
 		- cone(r1, r2, h)

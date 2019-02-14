@@ -52,7 +52,7 @@ m = m.fillet(1, refs=[
 	point3(-5.8,	5,		9.5),
 	point3( 5.8,	5,		9.5),
 	point3( 7.3,	5,		11)
-], epsilon=1)
+])
 
 display(m)
 #display(gate)
