@@ -10,7 +10,7 @@ class accumulator(zencad.assemble.unit):
 
 	def __init__(self):
 		super().__init__()
-		self.add_shape(self.shp)
+		self.add_shape(self.shp, color=(1,1,0,0.5))
 
 
 class controller(zencad.assemble.unit):
@@ -21,12 +21,14 @@ class controller(zencad.assemble.unit):
 
 	def __init__(self):
 		super().__init__()
-		self.add_shape(self.shp, color=pyservoce.green)
+		self.add_shape(self.shp, color=(0,1,0,0.5))
 
 
 accum = accumulator()
 contr = controller()
 contr.relocate(up(10+1))
+
+#bodyunit.set_color((0.6,0.6,0.6,0.5))
 
 disp(bodyunit)
 disp(accum)
