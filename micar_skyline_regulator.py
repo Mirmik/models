@@ -3,6 +3,7 @@
 
 from zencad import *
 lazy.diag = True
+lazy.fastdo =True
 
 def make_body(con, cil, centrad, tooth, forbolt):
 	r1, r2, h = con
@@ -11,13 +12,13 @@ def make_body(con, cil, centrad, tooth, forbolt):
 	rdel, rhole, deltaangle = forbolt
 	t = h - hc
 	
-	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)])
+	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)], fuse=True)
 	return (
 		cone(r1=r1, r2=r2, h=h) 
 		- cylinder(r=rc, h=hc).up(t) 
 		- cylinder(r=centrad, h=t)
 		- ctr(cylinder(r=rhole, h=t)).rotateZ(deltaangle)
-		+ rotate_array(toothes)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
+		+ rotate_array(toothes, fuse=True)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
 	)
 
 def make_base_support(r1, r2, s, h, t):
@@ -97,6 +98,8 @@ m = union([
 	base_support,
 	rebr
 ])
+
+m = unify(m)
 
 display(m)
 show()
