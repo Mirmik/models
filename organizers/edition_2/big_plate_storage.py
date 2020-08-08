@@ -25,7 +25,16 @@ for o in [10+25*i for i in range(6)]:
 for o in [10+25*i for i in range(6)]:
 	m -= sqrmirror()(sphere(5).move(0,y/2,o))
 
+f = cylinder(r=18, h=t)
+m += multitrans(
+	[
+		move(x/2 , y/2),
+		move(-x/2 , y/2),
+	]
+)(f) ^ m.bbox().shape()
 #wideline(segment((), ()))
+
+m = unify(m)
 
 to_stl(m, "./big_plate_storage.stl", 0.01)
 display(m)
