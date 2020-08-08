@@ -31,17 +31,17 @@ def storage(m, n, w, h, l, t, d, d2, corners = None):
 	arr.append(box(w*m+t*(m+1), l+t, t))
 	arr.append(box(w*m+t*(m+1), l+t, t).up(n*(h+t)))
 
-	ret = union(arr).rotateX(gr(-90)).up(z).left(x)
+	ret = union(arr).rotateX(deg(-90)).up(z).left(x)
 
 	if corners: 
 		c = cylinder(r=corners["r"], h=corners["h"]) - box(corners["r"], corners["r"], corners["h"])
 		c = c
 		ret = (
 			ret 
-			+ c.rotateZ(gr(90))
+			+ c.rotateZ(deg(90))
 			+ c.translate(-x,0,0)
-			+ c.rotateZ(gr(180)).translate(0,y,0)
-			+ c.rotateZ(gr(-90)).translate(-x,y,0)
+			+ c.rotateZ(deg(180)).translate(0,y,0)
+			+ c.rotateZ(deg(-90)).translate(-x,y,0)
 		)
 
 	return ret
@@ -58,7 +58,7 @@ def case(w,h,l,t,r,z,s):
 		box(w,l,h) - box(w-2*t, l-2*t,h-t).translate(t,t,t)
 
 		#Вычитаем цилиндр под ручку
-		- cylinder(r=r,h=t+1).rotateX(gr(90)).translate(w/2,t+0.5,h) 
+		- cylinder(r=r,h=t+1).rotateX(deg(90)).translate(w/2,t+0.5,h) 
 
 		#Формируем держатель ярлыка
 		+ box(w-2*t, z*2, h-r).translate(t,-z*2,0) 

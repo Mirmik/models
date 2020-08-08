@@ -1,0 +1,1 @@
+zencad --widget motor_holder.py 1>jjj 2>jjj2
