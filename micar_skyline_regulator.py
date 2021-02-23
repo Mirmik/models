@@ -12,13 +12,13 @@ def make_body(con, cil, centrad, tooth, forbolt):
 	rdel, rhole, deltaangle = forbolt
 	t = h - hc
 	
-	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)], fuse=True)
+	ctr = multitrans([right(rdel), left(rdel), forw(rdel), back(rdel)], array=False)
 	return (
 		cone(r1=r1, r2=r2, h=h) 
 		- cylinder(r=rc, h=hc).up(t) 
 		- cylinder(r=centrad, h=t)
 		- ctr(cylinder(r=rhole, h=t)).rotateZ(deltaangle)
-		+ rotate_array(toothes, fuse=True)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
+		+ rotate_array(toothes, array=False)(cylinder(r=tooth_radius, h=h-t).up(t).forw(rc))
 	)
 
 def make_base_support(r1, r2, s, h, t):
